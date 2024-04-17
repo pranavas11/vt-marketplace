@@ -5,6 +5,7 @@ import mongoose from 'mongoose'
 
 import homeRoutes from './routes/home.js'
 import userRoutes from './routes/user.js'
+import adminRoutes from './routes/admin.js'
 import createRoutes from './routes/create.js'
 import postRoutes from './routes/posts.js'
 import https from 'https'
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 
 app.use('/home', homeRoutes)
 app.use('/user', userRoutes)
+app.use('/admin', adminRoutes)
 app.use('/create', createRoutes)
 app.use('/posts', postRoutes)
 
@@ -36,7 +38,7 @@ app.use('/posts', postRoutes)
 const server = https.createServer(options, app)
 
 mongoose
-	.connect('mongodb+srv://gansh:PWJQGzrvAb9PMuXm@cluster0.nzkhjw4.mongodb.net/?retryWrites=true&w=majority')
+	.connect('mongodb+srv://ppranav02:sFbiMbZZLXRKQLYz@vt-marketplace-cluster.jntaw3c.mongodb.net/')
 	.then(() => server.listen(port, () => console.log(`Server Running on Port: ${port}`)))
 	.catch((error) => console.log(`${error} could not connect`))
 

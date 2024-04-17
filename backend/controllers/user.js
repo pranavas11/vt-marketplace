@@ -31,7 +31,7 @@ export const signin = async (req, res) => {
 			expiresIn: '24h',
 		})
 
-		res.status(200).json({ result: userExists, token })
+		res.status(200).json({ result: userExists, token, isAdmin: userExists.isAdmin})
 	} catch (error) {
 		res.status(500).json({ message: error.message })
 	}
