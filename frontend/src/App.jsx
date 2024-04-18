@@ -35,6 +35,7 @@ import UserSettings from './Pages/UserSettings.jsx';
 import UpdateItem from './Pages/UpdateItem.jsx';
 import Loading from './Pages/Loading.jsx';
 import SellerPage from './Pages/SellerPage.jsx';
+import AdminPage from './Pages/AdminPage.jsx';
 
 function App() {
   const [openLogin, setOpenLogin] = useState(false);
@@ -44,6 +45,7 @@ function App() {
     setSignedIn(false);
     // Perform additional sign-out tasks, e.g., clearing tokens
   };
+  
 
   const handleSignIn = (username, password) => {
     // For now, let's assume if both fields are filled, it's a successful login.
@@ -96,6 +98,7 @@ function App() {
           user={user}
           />
           <Routes>
+            <Route path="/admin" element={user && user.isAdmin ? <AdminPage user={user} /> : <Homepage />} />
             <Route path="/" element={<Homepage user={user} />} />
             <Route path="/home" element={<Homepage user={user} />} />
             <Route path="/signup" element={<SignUp user={user} />} />

@@ -27,7 +27,7 @@ export const signin = async (req, res) => {
 
 		if (!passwordIsRight) return res.status(400).json({ message: 'Invalid credentials.' })
 
-		const token = jwt.sign({ email: userExists.email, id: userExists._id }, secret, {
+		const token = jwt.sign({ email: userExists.email, id: userExists._id, isAdmin: userExists.isAdmin }, secret, {
 			expiresIn: '24h',
 		})
 
@@ -125,7 +125,51 @@ export const getUserByID = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 }
+/**
+ * Create a new admin user.
+ * 
+ * @param {*} req - The request object, including admin user details.
+ * @param {*} res - The response object.
+ * @returns A success response with the new admin user data, or an error message.
+ */
+export const createAdminUser = async (req, res) => {
+    // Destructure the relevant data from req.body
+    const { email, password, fname, lname } = req.body;
 
+    try {
+        // Check if a user with the given email already exists
+        const existingUser = await UserModel.findOne({ email });
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists." });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 12);
+
+        // Create a new user with isAdmin set to true
+        const newUser = new UserModel({
+            fname,
+            lname,
+            email,
+            password: hashedPassword,
+            isAdmin: true
+        });
+
+        // Save the new admin user to the database
+        const result = await newUser.save();
+
+        // Create a token for the new admin user
+        const token = jwt.sign(
+            { email: result.email, id: result._id, isAdmin: result.isAdmin },
+            secret,
+            { expiresIn: "1h" } // You may want to set a short expiration time for admin tokens
+        );
+
+        res.status(201).json({ result, token });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
 
 /**

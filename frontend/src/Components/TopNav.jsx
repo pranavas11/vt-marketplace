@@ -17,6 +17,10 @@ const TopNav = ({ user }) => {
 		deleteAuthToken()
 		window.location.href = '/'
 	}
+	
+	const goToAdminPage = () => {
+		navigate('/admin');
+	  };
 
 	// Function to navigate to sign up page
 	const onSignUpClick = () => {
@@ -61,12 +65,17 @@ const TopNav = ({ user }) => {
 				<div className='auth'>
 					{user ? (
 						<>
+						  {user.isAdmin && (
+								<button className='auth-button' onClick={goToAdminPage}>
+								Admin Dashboard
+								</button>
+							)}
 							<button  onClick={goToUserPage}>{user.fname}</button>
 							<button className='auth-button' onClick={signOut}>
 								Log Out
 							</button>
 						</>
-						
+					
 					) : (
 						<>
 							<button className='auth-button' onClick={onSignUpClick}>
