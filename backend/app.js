@@ -17,7 +17,7 @@ const options = {
 	cert: fs.readFileSync('./certs/cert.pem')
 }
 const app = express()
-const port = process.env.PORT || 5000
+const PORT = process.env.PORT || 8080
 
 
 app.use(bodyParser.json({ extended: true }))
@@ -39,7 +39,7 @@ const server = https.createServer(options, app)
 
 mongoose
 	.connect('mongodb+srv://ppranav02:sFbiMbZZLXRKQLYz@vt-marketplace-cluster.jntaw3c.mongodb.net/')
-	.then(() => server.listen(port, () => console.log(`Server Running on Port: ${port}`)))
+	.then(() => server.listen(PORT, () => console.log(`Server Running on Port: ${PORT}`)))
 	.catch((error) => console.log(`${error} could not connect`))
 
 // mongoose

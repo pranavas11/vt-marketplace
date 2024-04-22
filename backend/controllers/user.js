@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import UserModel from '../models/user.js'
 import Post from '../models/post.js'
-const secret = process.env.SECERT || 'test'
+const secret = process.env.SECRET || 'test'
 
 /**
  * 
@@ -294,5 +294,83 @@ export const updateCurrentUserPWD = async (req, res) => {
 		res.status(500).json({ message: error.message });
 	}
 }
+//Statistics
+
+export const getAllUsers = async (req, res) => {
+    try {
+        const users = await UserModel.find({}).select('-password'); // Exclude passwords for security
+        res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Function to get listing statistics
+export const getListingStats = async (req, res) => {
+    try {
+        // Calculate the total number of listings
+        const listingCount = await Post.countDocuments();
+		console.log(`There are ${listingCount} listings.`);
+        // Respond with the listing count
+        res.status(200).json({ listingCount });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+export const getCategoryStats = async (req, res) => {
+    try {
+        // Group the posts by category and count them
+        const categoryStats = await Post.aggregate([
+            {
+                $group: {
+                    _id: '$tag', // Assuming 'tag' is the field that stores the category
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $sort: {
+                    count: -1 // Optional: sorting by count in descending order
+                }
+            }
+        ]);
+
+        res.status(200).json(categoryStats);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+// Function to get user statistics
+export const getUserStats = async (req, res) => {
+    try {
+        // Calculate the total number of users
+        const userCount = await UserModel.countDocuments();
+
+        // Respond with the user count
+        console.log(`There are ${userCount} users.`);
+        res.status(200).json({userCount});
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Function to calculate the average price of listings
+export const getAverageListingPrice = async (req, res) => {
+    try {
+        // Calculate the average price of listings
+        const averagePrice = await Post.aggregate([
+            { $group: { _id: null, averagePrice: { $avg: "$price" } } }
+        ]);
+
+        // Extract the average price from the result
+        const averageListingPrice = averagePrice.length > 0 ? averagePrice[0].averagePrice : 0;
+
+        // Respond with the average listing price
+        res.status(200).json({ averageListingPrice });
+    } catch (error) {
+        // Handle errors
+        res.status(500).json({ message: error.message });
+    }
+};
+
 
 

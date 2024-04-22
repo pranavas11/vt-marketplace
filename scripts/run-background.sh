@@ -16,5 +16,5 @@ npm run dev &
 cd ..
 
 echo "Application is running"
-echo "Backend: https://localhost:5000"
+echo "Backend: https://localhost:8080"
 echo "Frontend: http://localhost:5173"

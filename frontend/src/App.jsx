@@ -63,7 +63,7 @@ function App() {
 
   useEffect(() => {
     async function getCurrentUser() {
-        await axios.get('https://localhost:5000/user/currentUser')
+        await axios.get('https://localhost:8080/user/currentUser')
         .then((res) => {
           if(res.status === 200){
             return res.data;
@@ -98,7 +98,9 @@ function App() {
           user={user}
           />
           <Routes>
-            <Route path="/admin" element={user && user.isAdmin ? <AdminPage user={user} /> : <Homepage />} />
+            {/* <Route path="/admin" element={user && user.isAdmin ? <AdminPage user={user} /> : <Homepage />} /> */}
+            <Route path="/admin" element={<AdminPage user={user} />} />
+
             <Route path="/" element={<Homepage user={user} />} />
             <Route path="/home" element={<Homepage user={user} />} />
             <Route path="/signup" element={<SignUp user={user} />} />

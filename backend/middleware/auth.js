@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import UserModel from '../models/user.js'; // Import your User model
 
-const secret = process.env.SECERT || 'test'
+const secret = process.env.SECRET || 'test'
 
 const auth = async (req, res, next) => {
     try {

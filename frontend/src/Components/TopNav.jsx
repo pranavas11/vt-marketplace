@@ -75,7 +75,6 @@ const TopNav = ({ user }) => {
 								Log Out
 							</button>
 						</>
-					
 					) : (
 						<>
 							<button className='auth-button' onClick={onSignUpClick}>

@@ -1,5 +1,5 @@
 import express from 'express'
-import { signin, signup, getCurrentUser, deleteCurrentUser, deleteUser, updateCurrentUser, updateCurrentUserPWD, getUserByID } from '../controllers/user.js'
+import { signin, signup, getCurrentUser, deleteCurrentUser, deleteUser, updateCurrentUser, updateCurrentUserPWD, getUserByID, getUserStats, getListingStats, getCategoryStats, getAverageListingPrice } from '../controllers/user.js'
 import auth from '../middleware/auth.js'
 import { getPostsByUser } from '../controllers/home.js'
 
@@ -27,4 +27,9 @@ router.patch('/updatePassword', auth, updateCurrentUserPWD)
 
 router.get('/:userID', auth, getUserByID)
 
+//Stats
+router.get('/stats/users', auth, getUserStats);
+router.get('/stats/listings', auth, getListingStats);
+router.get('/stats/listings/category', auth, getCategoryStats);
+router.get('/stats/listings/average-price', auth, getAverageListingPrice);
 export default router

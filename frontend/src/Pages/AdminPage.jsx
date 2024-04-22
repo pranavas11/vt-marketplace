@@ -2,80 +2,84 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const AdminPage = () => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
+    // const [users, setUsers] = useState([]);
+    // const [loading, setLoading] = useState(true);
+    const [userCount, setUserCount] = useState(0);
+    const [listingCount, setListingCount] = useState(0);
+    const [categoryCounts, setCategoryCounts] = useState(0);
+    const [averageListingPrice, setAverageListingPrice] = useState(0);
 
-    // Function to fetch all users
-    const fetchUsers = async () => {
-        try {
-            const response = await axios.get('/api/admin/users'); // Update the endpoint as necessary
-            setUsers(response.data);
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-            setLoading(false);
+
+useEffect(() => {
+    const fetchStats = async () => {
+      
+      try{
+          const userRes = await axios.get('https://localhost:8080/user/stats/users');
+          setUserCount(userRes.data.userCount);
+
+          const listingRes = await axios.get('https://localhost:8080/user/stats/listings');
+          setListingCount(listingRes.data.listingCount);
+
+          // const averagePriceRes = await axios.get('https://localhost:8080/user/stats/listings/average-price');
+          // setAverageListingPrice(averagePriceRes.data.averagePrice);
+
+          const categoryRes = await axios.get('https://localhost:8080/user/stats/listings/category');
+          setCategoryCounts(categoryRes.data);
+
+          // const categoryRes = await axios.get('https://localhost:8080/user/stats/listings/category');
+          // setCategoryCounts(categoryRes.data.categoryCounts);
+       
+      }catch(error) {
+        
+          console.error("Failed to fetch stats:", error);
+         
         }
+         
     };
 
-    // Function to promote a user to admin
-    const promoteToAdmin = async (userId) => {
-        try {
-            await axios.patch(`/api/admin/promote/${userId}`);
-            alert('User has been promoted to admin successfully.');
-            fetchUsers(); // Re-fetch users to update the list
-        } catch (error) {
-            alert('Failed to promote user to admin:', error.message);
-        }
-    };
+    fetchStats();
+   
+  }, []);
+  
 
-    // Function to deactivate a user
-    const deactivateUser = async (userId) => {
-        try {
-            await axios.patch(`/api/admin/deactivate/${userId}`);
-            alert('User has been deactivated successfully.');
-            fetchUsers(); // Re-fetch users to update the list
-        } catch (error) {
-            alert('Failed to deactivate user:', error.message);
-        }
-    };
+  // Now you can use userCount, listingCount, and categoryCounts to display your statistics
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
 
-    if (loading) {
-        return <p>Loading users...</p>;
-    }
-
-    return (
-        <div>
-            <h1>Admin Dashboard</h1>
-            <h2>User Management</h2>
-            <table>
+  return (
+    <div>
+      <h1>Admin Dashboard</h1>
+      <h2>Statistics</h2>
+      {/* <p>Total Users: {userCount}</p>
+      <p>Total Listings: {listingCount}</p> */}
+                  <table>
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Actions</th>
+                        <th>Statistic</th>
+                        <th>Value</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {users.map(user => (
-                        <tr key={user._id}>
-                            <td>{`${user.fname} ${user.lname}`}</td>
-                            <td>{user.email}</td>
-                            <td>
-                                <button onClick={() => promoteToAdmin(user._id)}>Promote to Admin</button>
-                                <button onClick={() => deactivateUser(user._id)} style={{ marginLeft: '10px' }}>
-                                    Deactivate
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    <tr>
+                        <td>Total Users:</td>
+                        <td>{userCount}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Listings:</td>
+                        <td>{listingCount}</td>
+                    </tr>
+               
+                {/* Iterate over categoryCounts to display each category and its count */}
+                {categoryCounts.map((category) => (
+                  <tr key={category._id}>
+                    <td>Category - {category._id}:</td>
+                    <td>{category.count}</td>
+                  </tr>
+                ))}
                 </tbody>
             </table>
-        </div>
-    );
+
+    </div>
+  );
 };
 
 export default AdminPage;

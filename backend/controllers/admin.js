@@ -1,11 +1,49 @@
 // controllers/admin.js
-
 import UserModel from '../models/user.js'; // Assuming you have a UserModel
+import Post from '../models/post.js';
 
 export const getAllUsers = async (req, res) => {
     try {
         const users = await UserModel.find({}).select('-password'); // Exclude passwords for security
         res.status(200).json(users);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+export const getCategoryStats = async (req, res) => {
+    try {
+        // Group the posts by category and count them
+        const categoryStats = await Post.aggregate([
+            { $match: { tag: { $exists: true, $ne: null } } }, // ensure the tag exists and is not null
+            { $group: { _id: '$tag', count: { $sum: 1 } } }
+        ]);
+
+        res.status(200).json(categoryStats);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+// Function to get listing statistics
+export const getListingStats = async (req, res) => {
+    try {
+        // Calculate the total number of listings
+        const listingCount = await Post.countDocuments();
+
+        // Respond with the listing count
+        res.status(200).json({ listingCount });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+// Function to get user statistics
+export const getUserStats = async (req, res) => {
+    try {
+        // Calculate the total number of users
+        const userCount = await UserModel.countDocuments();
+
+        // Respond with the user count
+        console.log(`There are ${count} users.`);
+        res.status(200).json({ userCount });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

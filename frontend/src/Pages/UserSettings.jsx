@@ -69,7 +69,7 @@ const UserSettings = ({user}) => {
     }
     if (window.confirm('Are you sure you want to change your password?')) {
       // Here we use axios to send a PATCH request
-      axios.patch('https://localhost:5000/user/updatePassword', {
+      axios.patch('https://localhost:8080/user/updatePassword', {
         oldPassword: passwords.oldPassword,
         password: passwords.password,
         confirmPassword: passwords.confirmPassword
@@ -93,7 +93,7 @@ const UserSettings = ({user}) => {
 
   const deleteAccount = () => {
     if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      axios.delete('https://localhost:5000/user/delete')
+      axios.delete('https://localhost:8080/user/delete')
       .then ( response => {
         console.log("User Deleted succesfullly", response.data);
         alert("User has been deleted succesfully");
