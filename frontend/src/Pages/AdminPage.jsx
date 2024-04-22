@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import stats1 from '../assets/stats1.png';
+import CategoryBarChart from '../Components/CategoryChart';
 
 const AdminPage = () => {
     // const [users, setUsers] = useState([]);
     // const [loading, setLoading] = useState(true);
     const [userCount, setUserCount] = useState(0);
     const [listingCount, setListingCount] = useState(0);
-    const [categoryCounts, setCategoryCounts] = useState(0);
+    const [categoryCounts, setCategoryCounts] = useState([]);
     const [averageListingPrice, setAverageListingPrice] = useState(0);
 
 
@@ -49,8 +51,6 @@ useEffect(() => {
     <div>
       <h1>Admin Dashboard</h1>
       <h2>Statistics</h2>
-      {/* <p>Total Users: {userCount}</p>
-      <p>Total Listings: {listingCount}</p> */}
                   <table>
                 <thead>
                     <tr>
@@ -67,17 +67,26 @@ useEffect(() => {
                         <td>Total Listings:</td>
                         <td>{listingCount}</td>
                     </tr>
-               
-                {/* Iterate over categoryCounts to display each category and its count */}
-                {categoryCounts.map((category) => (
-                  <tr key={category._id}>
-                    <td>Category - {category._id}:</td>
-                    <td>{category.count}</td>
-                  </tr>
-                ))}
+                    {categoryCounts.map((category) => (
+                      <tr key={category._id}>
+                        <td>Category - {category._id}:</td>
+                        <td>{category.count}</td>
+                      </tr>
+                    ))}
+            {/* Iterate over categoryCounts to display each category and its count */}
+            {/* {categoryCounts.map((category) => (
+              <tr key={category._id}>
+                <td>Category - {category._id}:</td>
+                <td>{category.count}</td>
+              </tr>
+            ))} */}
                 </tbody>
             </table>
-
+            {/* <div style={{ width: '600px', height: '400px' }}>
+      <CategoryBarChart categoryCounts={categoryCounts} />
+    </div> */}
+             {/* If you imported the image */}
+             <img src={stats1} alt="VT Marketplace Customer Feedback Statistics" className='stats-icon' />
     </div>
   );
 };

@@ -12,7 +12,6 @@ import {
     // ...other imports
   } from '../controllers/admin.js';
   import adminAuth from '../middleware/adminAuth.js';
-  import auth from '../middleware/auth.js'
 
   
 
